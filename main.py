@@ -1677,6 +1677,7 @@ def index():
             .auth-btn { width: 100%; margin-bottom: 12px; padding: 12px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; border-radius: 6px; border: none; }
             .auth-btn.google { background: #fff; color: #000; display: flex; align-items: center; justify-content: center; gap: 10px;}
             #auth-error { color: #ff4c4c; font-size: 0.9rem; margin-bottom: 12px; display: none; }
+            :root {
                 --primary: #00ff88;
                 --secondary: #00d2ff;
                 --accent: #ff9800;
