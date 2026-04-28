@@ -1632,51 +1632,9 @@ def index():
         <meta charset="UTF-8">
         <title>Smart AI Traffic Simulation</title>
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-        <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-analytics.js";
-            import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
-            const firebaseConfig = {
-                apiKey: "AIzaSyBddU5RNPQuFg6sKr8JzW1RKZNd90Dz7Jc",
-                authDomain: "cyberxbank-7dc0b.firebaseapp.com",
-                projectId: "cyberxbank-7dc0b",
-                storageBucket: "cyberxbank-7dc0b.firebasestorage.app",
-                messagingSenderId: "448176780627",
-                appId: "1:448176780627:web:463aab01136eef36c85da6",
-                measurementId: "G-RXMNBXBJVW"
-            };
-
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app);
-            const auth = getAuth(app);
-            window.auth = auth;
-            window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-            window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-            window.signInWithPopup = signInWithPopup;
-            window.GoogleAuthProvider = GoogleAuthProvider;
-            window.onAuthStateChanged = onAuthStateChanged;
-            window.signOut = signOut;
-        </script>
         <style>
-            #login-overlay {
-                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                background: var(--bg); z-index: 9999;
-                display: flex; flex-direction: column; align-items: center; justify-content: center;
-            }
-            .login-box {
-                background: var(--surface); padding: 40px; border-radius: 8px;
-                border: 1px solid var(--surface-border); max-width: 400px; width: 100%;
-                text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            }
-            .login-box input {
-                width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 4px;
-                background: rgba(0,0,0,0.3); color: #fff; border: 1px solid rgba(255,255,255,0.1);
-                box-sizing: border-box; font-family: 'Outfit', sans-serif;
-            }
-            .auth-btn { width: 100%; margin-bottom: 12px; padding: 12px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; border-radius: 6px; border: none; }
-            .auth-btn.google { background: #fff; color: #000; display: flex; align-items: center; justify-content: center; gap: 10px;}
-            #auth-error { color: #ff4c4c; font-size: 0.9rem; margin-bottom: 12px; display: none; }
+
             :root {
                 --primary: #00ff88;
                 --secondary: #00d2ff;
@@ -2083,20 +2041,7 @@ def index():
         </style>
     </head>
     <body>
-        <div id="login-overlay">
-            <div class="login-box">
-                <h2>Sign In</h2>
-                <input type="email" id="email" placeholder="Email">
-                <input type="password" id="password" placeholder="Password">
-                <div id="auth-error"></div>
-                <button class="auth-btn" onclick="handleEmailLogin()" style="background: var(--primary); color: #000;">Sign In / Sign Up</button>
-                <button class="auth-btn google" onclick="handleGoogleLogin()">
-                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                    Sign in with Google
-                </button>
-            </div>
-        </div>
-        <div id="dashboard-content" style="display: none;">
+        <div id="dashboard-content">
             <h1>SmartTraffic Digital Twin</h1>
             <p class="subtitle">AI Signal Optimization Platform for real city intersections</p>
             <div class="container">
@@ -2142,7 +2087,7 @@ def index():
                 <div class="action-row">
                     <button onclick="generateReport()">Generate Before/After Report</button>
                     <button onclick="downloadReportPdf()">Download PDF Report</button>
-                    <button onclick="handleLogout()" style="border-color:#ff4c4c; color:#ff4c4c;">Sign Out</button>
+
                 </div>
 
                 <div id="report_panel" class="report-panel"></div>
@@ -2260,64 +2205,8 @@ def index():
         </div>
 
         <script>
-            function showAuthError(msg) {
-                const el = document.getElementById('auth-error');
-                el.innerText = msg;
-                el.style.display = 'block';
-            }
-
-            async function handleEmailLogin() {
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                if (password.length < 8) {
-                    showAuthError("Password must be at least 8 characters long.");
-                    return;
-                }
-                try {
-                    await window.signInWithEmailAndPassword(window.auth, email, password);
-                } catch (error) {
-                    if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-                        try {
-                            await window.createUserWithEmailAndPassword(window.auth, email, password);
-                        } catch (signupError) {
-                            showAuthError(signupError.message);
-                        }
-                    } else {
-                        showAuthError(error.message);
-                    }
-                }
-            }
-
-            async function handleGoogleLogin() {
-                try {
-                    const provider = new window.GoogleAuthProvider();
-                    await window.signInWithPopup(window.auth, provider);
-                } catch (error) {
-                    showAuthError(error.message);
-                }
-            }
-
-            async function handleLogout() {
-                if (window.auth) {
-                    await window.signOut(window.auth);
-                }
-            }
-
             window.addEventListener('load', () => {
-                const checkAuthInterval = setInterval(() => {
-                    if (window.auth && window.onAuthStateChanged) {
-                        clearInterval(checkAuthInterval);
-                        window.onAuthStateChanged(window.auth, (user) => {
-                            if (user) {
-                                document.getElementById('login-overlay').style.display = 'none';
-                                startDashboard();
-                            } else {
-                                document.getElementById('login-overlay').style.display = 'flex';
-                                stopDashboard();
-                            }
-                        });
-                    }
-                }, 100);
+                startDashboard();
             });
 
             let dashboardStarted = false;
