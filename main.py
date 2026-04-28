@@ -2095,9 +2095,10 @@ def index():
                 </button>
             </div>
         </div>
-        <h1>SmartTraffic Digital Twin</h1>
-        <p class="subtitle">AI Signal Optimization Platform for real city intersections</p>
-        <div class="container">
+        <div id="dashboard-content" style="display: none;">
+            <h1>SmartTraffic Digital Twin</h1>
+            <p class="subtitle">AI Signal Optimization Platform for real city intersections</p>
+            <div class="container">
             <div class="controls">
                 <h3>
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -2217,7 +2218,7 @@ def index():
             </div>
             <div class="video-stack">
                 <div class="video-container">
-                    <img id="feed" src="/video_feed" width="800" height="800" alt="Video Feed" />
+                    <img id="feed" src="" width="800" height="800" alt="Video Feed" />
                 </div>
 
                 <div class="analysis-panel">
@@ -2231,19 +2232,19 @@ def index():
                     <div class="road-video-grid">
                         <div class="road-feed-card">
                             <strong>North road <span>v1.mp4</span></strong>
-                            <img src="/processed_video/1" alt="North road YOLO analysis" />
+                            <img id="cam1" src="" alt="North road YOLO analysis" />
                         </div>
                         <div class="road-feed-card">
                             <strong>South road <span>v2.mp4</span></strong>
-                            <img src="/processed_video/2" alt="South road YOLO analysis" />
+                            <img id="cam2" src="" alt="South road YOLO analysis" />
                         </div>
                         <div class="road-feed-card">
                             <strong>East road <span>v3.mp4</span></strong>
-                            <img src="/processed_video/3" alt="East road YOLO analysis" />
+                            <img id="cam3" src="" alt="East road YOLO analysis" />
                         </div>
                         <div class="road-feed-card">
                             <strong>West road <span>v4.mp4</span></strong>
-                            <img src="/processed_video/4" alt="West road YOLO analysis" />
+                            <img id="cam4" src="" alt="West road YOLO analysis" />
                         </div>
                     </div>
                     <div class="sensor-grid">
@@ -2254,6 +2255,7 @@ def index():
                     </div>
                 </div>
             </div>
+        </div>
         </div>
 
         <script>
@@ -2307,13 +2309,50 @@ def index():
                         window.onAuthStateChanged(window.auth, (user) => {
                             if (user) {
                                 document.getElementById('login-overlay').style.display = 'none';
+                                startDashboard();
                             } else {
                                 document.getElementById('login-overlay').style.display = 'flex';
+                                stopDashboard();
                             }
                         });
                     }
                 }, 100);
             });
+
+            let dashboardStarted = false;
+            let metricsInterval, opsInterval;
+
+            function startDashboard() {
+                if (dashboardStarted) return;
+                dashboardStarted = true;
+                
+                document.getElementById('dashboard-content').style.display = 'block';
+                
+                document.getElementById('feed').src = "/video_feed";
+                document.getElementById('cam1').src = "/processed_video/1";
+                document.getElementById('cam2').src = "/processed_video/2";
+                document.getElementById('cam3').src = "/processed_video/3";
+                document.getElementById('cam4').src = "/processed_video/4";
+                
+                metricsInterval = setInterval(refreshMetrics, 900);
+                opsInterval = setInterval(refreshOps, 1600);
+                refreshMetrics();
+                refreshOps();
+            }
+
+            function stopDashboard() {
+                dashboardStarted = false;
+                document.getElementById('dashboard-content').style.display = 'none';
+                
+                document.getElementById('feed').src = "";
+                document.getElementById('cam1').src = "";
+                document.getElementById('cam2').src = "";
+                document.getElementById('cam3').src = "";
+                document.getElementById('cam4').src = "";
+                
+                if (metricsInterval) clearInterval(metricsInterval);
+                if (opsInterval) clearInterval(opsInterval);
+            }
 
             async function setMode(mode) {
                 await fetch(`/set_mode?mode=${mode}`);
@@ -2435,10 +2474,7 @@ def index():
                 }
             }
 
-            setInterval(refreshMetrics, 900);
-            setInterval(refreshOps, 1600);
-            refreshMetrics();
-            refreshOps();
+            // Initialization now happens in startDashboard() after login
         </script>
     </body>
     </html>
